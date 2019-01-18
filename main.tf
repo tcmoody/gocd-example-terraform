@@ -24,7 +24,28 @@ module "bastion" {
     source = "./bastion"
     vpc_name = "${var.vpc_name}"
     key_name = "${var.key_name}"
+    ami_id = "${var.ami_id}"
     public_subnet_id = "${module.vpc.public_subnet_id}"
     bastion_remote_login_in_id = "${module.sg.bastion_remote_login_in_id}"
     outbound_all_id = "${module.sg.outbound_all_id}"
+}
+
+module "server" {
+    source = "./server"
+    key_name = "${var.key_name}"
+    subnet_id = "${module.vpc.private_subnet_id}"
+    ami_id = "${var.ami_id}"
+}
+
+module "agent" {
+    source = "./agent"
+    key_name = "${var.key_name}"
+    subnet_id = "${module.vpc.private_subnet_id}"
+    ami_id = "${var.ami_id}"
+}
+
+module "lb" {
+    source = "./lb"
+    server_id = "${module.server.gocd_server_id}"
+    subnet_id = "${module.vpc.public_subnet_id}"
 }

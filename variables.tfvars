@@ -7,3 +7,4 @@ provision_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDM2Gxal8Ibhnh+ncBem+hvZAI
 vpc_cidr = "192.168.60.0/24"
 public_subnet_cidr = "192.168.60.0/26"
 private_subnet_cidr = "192.168.60.64/26"
+ami_id = "ami-035be7bafff33b6b6"
