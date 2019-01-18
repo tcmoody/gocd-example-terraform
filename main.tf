@@ -33,19 +33,30 @@ module "bastion" {
 module "server" {
     source = "./server"
     key_name = "${var.key_name}"
-    subnet_id = "${module.vpc.private_subnet_id}"
+    subnet_id = "${module.vpc.public_subnet_id}"
     ami_id = "${var.ami_id}"
+    ssh_in_id = "${module.sg.ssh_in_id}"
+    outbound_all_id = "${module.sg.outbound_all_id}"
+    gocd_server_in_id = "${module.sg.gocd_server_in_id}"
 }
 
 module "agent" {
     source = "./agent"
     key_name = "${var.key_name}"
-    subnet_id = "${module.vpc.private_subnet_id}"
+    subnet_id = "${module.vpc.public_subnet_id}"
     ami_id = "${var.ami_id}"
+    ssh_in_id = "${module.sg.ssh_in_id}"
+    outbound_all_id = "${module.sg.outbound_all_id}"
 }
 
 module "lb" {
     source = "./lb"
     server_id = "${module.server.gocd_server_id}"
     subnet_id = "${module.vpc.public_subnet_id}"
+}
+
+module "hosted_zone" {
+    source = "./hosted_zone"
+    hosted_zone = "${var.hosted_zone}"
+    lb-dns-name = "${module.lb.gocd-server-lb-dns-name}"
 }

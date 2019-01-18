@@ -1,6 +1,5 @@
 resource "aws_elb" "gocd-server-lb" {
     name = "gocd-server-lb"
-    // availability_zones = ["us-east-1a", "us-east-1b"]
     subnets = ["${var.subnet_id}"]
     listener {
         instance_port     = 8153
@@ -13,7 +12,7 @@ resource "aws_elb" "gocd-server-lb" {
         healthy_threshold   = 2
         unhealthy_threshold = 2
         timeout             = 3
-        target              = "HTTP:8153/"
+        target              = "TCP:8153"
         interval            = 30
     }
 
@@ -27,3 +26,8 @@ resource "aws_elb" "gocd-server-lb" {
         Name = "gocd-server-elb"
     }
 }
+
+output "gocd-server-lb-dns-name" {
+    value = "${aws_elb.gocd-server-lb.dns_name}"
+}
+

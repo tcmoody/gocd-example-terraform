@@ -6,6 +6,7 @@ resource "aws_instance" "gocd_server" {
     tags = {
         Name = "gocd-server"
     }
+    vpc_security_group_ids = ["${var.ssh_in_id}",  "${var.outbound_all_id}", "${var.gocd_server_in_id}"]
 }
 
 output "gocd_server_id" {

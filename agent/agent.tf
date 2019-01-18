@@ -6,4 +6,5 @@ resource "aws_instance" "gocd_agent" {
     tags = {
         Name = "gocd-agent"
     }
+    vpc_security_group_ids = ["${var.ssh_in_id}", "${var.outbound_all_id}"]
 }
