@@ -46,6 +46,19 @@ resource "aws_security_group" "gocd_server_in" {
   }
 }
 
+resource "aws_security_group" "elb-inbound-http" {
+  name        = "${var.vpc_name}-elb-inbound-http"
+  description = "Allow http inbound traffic from anywhere to elb"
+  vpc_id      = "${var.vpc_id}"
+
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "TCP"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
 // Outputs
 output "bastion_remote_login_in_id" {
   value = "${aws_security_group.bastion-remote-login-in.id}"
@@ -61,4 +74,8 @@ output "ssh_in_id" {
 
 output "gocd_server_in_id" {
   value = "${aws_security_group.gocd_server_in.id}"
+}
+
+output "elb_inbound_http_id" {
+  value = "${aws_security_group.elb-inbound-http.id}"
 }

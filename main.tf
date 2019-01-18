@@ -33,7 +33,7 @@ module "bastion" {
 module "server" {
     source = "./server"
     key_name = "${var.key_name}"
-    subnet_id = "${module.vpc.public_subnet_id}"
+    subnet_id = "${module.vpc.private_subnet_id}"
     ami_id = "${var.ami_id}"
     ssh_in_id = "${module.sg.ssh_in_id}"
     outbound_all_id = "${module.sg.outbound_all_id}"
@@ -43,7 +43,7 @@ module "server" {
 module "agent" {
     source = "./agent"
     key_name = "${var.key_name}"
-    subnet_id = "${module.vpc.public_subnet_id}"
+    subnet_id = "${module.vpc.private_subnet_id}"
     ami_id = "${var.ami_id}"
     ssh_in_id = "${module.sg.ssh_in_id}"
     outbound_all_id = "${module.sg.outbound_all_id}"
@@ -53,6 +53,8 @@ module "lb" {
     source = "./lb"
     server_id = "${module.server.gocd_server_id}"
     subnet_id = "${module.vpc.public_subnet_id}"
+    outbound_all_id = "${module.sg.outbound_all_id}"
+    elb_inbound_http_id = "${module.sg.elb_inbound_http_id}"
 }
 
 module "hosted_zone" {

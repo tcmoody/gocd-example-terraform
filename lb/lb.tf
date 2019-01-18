@@ -1,6 +1,10 @@
 resource "aws_elb" "gocd-server-lb" {
     name = "gocd-server-lb"
     subnets = ["${var.subnet_id}"]
+    security_groups = [
+        "${var.outbound_all_id}",
+        "${var.elb_inbound_http_id}"
+    ]
     listener {
         instance_port     = 8153
         instance_protocol = "http"
